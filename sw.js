@@ -1,6 +1,5 @@
-const CACHE_NAME = 'video-player-pwa-v2';
+const CACHE_NAME = 'video-player-pwa-v3';
 
-// Use strictly relative paths for GitHub Pages
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -14,10 +13,8 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('SW: Caching core app shell assets');
         return cache.addAll(ASSETS_TO_CACHE);
       })
-      .catch(err => console.error('SW: Cache addAll failed! Check file names:', err))
   );
   self.skipWaiting();
 });
@@ -29,6 +26,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
+      // Direct asset fetch fallback to make video chunking works cleanly offline
       return cachedResponse || fetch(event.request);
     })
   );
