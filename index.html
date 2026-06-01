@@ -3,25 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luxury Media Manager</title>
+    <title>Grand Luxury Cinema Vault</title>
     <style>
-        /* --- Luxury & Gold Theme Colors --- */
+        /* --- High-End Cinematic Luxury Theme --- */
         :root {
-            --bg-primary: #0d0d0d;
-            --bg-secondary: #1a1a1a;
-            --bg-card: #242424;
-            --gold-primary: #d4af37;
-            --gold-hover: #f3e5ab;
-            --gold-gradient: linear-gradient(135deg, #b38728, #fbf5b7, #daa520, #aa771c);
-            --text-main: #f5f5f5;
-            --text-muted: #aaaaaa;
-            --border-gold: 1px solid rgba(212, 175, 55, 0.3);
+            --bg-deep: #0a0a0a;
+            --bg-surface: #141414;
+            --bg-element: #1e1e1e;
+            --gold-light: #f6e3a2;
+            --gold-main: #cda250;
+            --gold-dark: #96702d;
+            --gold-gradient: linear-gradient(135deg, #96702d 0%, #cda250 50%, #f6e3a2 100%);
+            --text-light: #fdfdfd;
+            --text-dim: #999999;
+            --border-gold: 1px solid rgba(205, 162, 80, 0.25);
+            --gold-glow: 0px 0px 15px rgba(205, 162, 80, 0.15);
         }
 
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background-color: var(--bg-primary);
-            color: var(--text-main);
+            font-family: 'Cinzel', 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg-deep);
+            color: var(--text-light);
             margin: 0;
             padding: 20px;
             display: flex;
@@ -31,118 +33,131 @@
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             border-bottom: var(--border-gold);
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             width: 100%;
-            max-width: 900px;
+            max-width: 1300px;
         }
 
         header h1 {
             font-weight: 300;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             text-transform: uppercase;
         }
 
         .status-bar {
-            font-size: 13px;
-            letter-spacing: 1px;
-            color: var(--gold-primary);
-            font-style: italic;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--gold-main);
+            text-transform: uppercase;
         }
 
-        main {
+        /* --- Main Layout Grid --- */
+        .workspace {
             width: 100%;
-            max-width: 900px;
+            max-width: 1300px;
             display: grid;
             grid-template-columns: 1fr;
             gap: 30px;
         }
 
-        @media (min-width: 768px) {
-            main {
-                grid-template-columns: 350px 1fr;
+        @media (min-width: 1024px) {
+            .workspace {
+                grid-template-columns: 420px 1fr;
             }
         }
 
-        /* --- Luxury Form Styling --- */
+        /* --- Form Panels & Luxury Elements --- */
         .panel {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-surface);
             border: var(--border-gold);
             border-radius: 4px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            box-shadow: var(--gold-glow);
             height: fit-content;
         }
 
         .panel h2 {
-            font-size: 18px;
-            font-weight: 300;
-            color: var(--gold-primary);
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--gold-main);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-top: 0;
             margin-bottom: 20px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(205, 162, 80, 0.1);
             padding-bottom: 10px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        label .optional {
+            color: #555;
+            font-size: 10px;
+            text-transform: lowercase;
+            font-style: italic;
         }
 
         input[type="text"], textarea {
             width: 100%;
             box-sizing: border-box;
-            background-color: var(--bg-primary);
-            border: 1px solid #444;
-            color: var(--text-main);
-            padding: 12px;
+            background-color: var(--bg-deep);
+            border: 1px solid #2d2d2d;
+            color: var(--text-light);
+            padding: 10px 12px;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 13px;
             border-radius: 2px;
-            transition: border 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         input[type="text"]:focus, textarea:focus {
             outline: none;
-            border: 1px solid var(--gold-primary);
+            border-color: var(--gold-main);
+            box-shadow: 0 0 8px rgba(205, 162, 80, 0.2);
         }
 
-        .episode-row {
-            background: rgba(0,0,0,0.2);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-left: 2px solid var(--gold-primary);
+        /* --- Dynamic Episode Card Architecture --- */
+        .episode-builder-card {
+            background: var(--bg-element);
+            border: 1px solid #2d2d2d;
+            padding: 15px;
+            margin-bottom: 15px;
             position: relative;
+            border-left: 3px solid var(--gold-main);
         }
 
-        .btn-remove-ep {
+        .btn-remove-node {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 10px;
+            right: 10px;
             background: none;
             border: none;
-            color: #ff4d4d;
+            color: #8b2626;
             cursor: pointer;
-            font-size: 12px;
+            font-weight: bold;
+            transition: color 0.2s;
         }
+        .btn-remove-node:hover { color: #ff4d4d; }
 
-        /* --- Elite Buttons --- */
-        button.btn-gold {
+        /* --- Action Controls --- */
+        button.btn-prime {
             width: 100%;
             padding: 12px;
             background: var(--gold-gradient);
@@ -153,356 +168,377 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s;
             border-radius: 2px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
+        button.btn-prime:hover { opacity: 0.9; }
 
-        button.btn-gold:hover {
-            opacity: 0.9;
-        }
-
-        button.btn-secondary {
+        button.btn-action-dim {
             background: transparent;
-            border: 1px solid var(--gold-primary);
-            color: var(--gold-primary);
+            border: 1px solid var(--gold-dark);
+            color: var(--gold-main);
             padding: 8px 12px;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
             margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        button.btn-action-dim:hover { background: rgba(205, 162, 80, 0.08); border-color: var(--gold-main); }
+
+        /* --- Theater / Dynamic Screen Feed Display --- */
+        .theater-room {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
         }
 
-        button.btn-secondary:hover {
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        /* --- Content List Styling --- */
-        .content-card {
-            background-color: var(--bg-card);
+        .cinema-screen-container {
+            background-color: #000;
             border: var(--border-gold);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 3px;
+            box-shadow: var(--gold-glow);
+            width: 100%;
+            aspect-ratio: 16 / 9;
             position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            overflow: hidden;
         }
 
-        .card-header {
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* --- Curated Collection Grid Rendering --- */
+        .vault-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .showcase-card {
+            background: var(--bg-surface);
+            border: var(--border-gold);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        @media (min-width: 600px) {
+            .showcase-card { flex-direction: row; }
+        }
+
+        .showcase-banner {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-size: cover;
+            background-position: center;
+            background-color: #111;
+            flex-shrink: 0;
+        }
+        @media (min-width: 600px) {
+            .showcase-banner { width: 240px; height: auto; }
+        }
+
+        .showcase-details {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .showcase-meta-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
-        .card-title {
-            font-size: 20px;
-            font-weight: 300;
-            margin: 0;
+        .showcase-title {
+            font-size: 18px;
+            font-weight: 400;
             color: #fff;
+            margin: 0;
             letter-spacing: 1px;
         }
 
-        .card-actions button {
+        .showcase-synopsis {
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-family: sans-serif;
+        }
+
+        /* --- Dynamic Playlist Render Engine --- */
+        .playlist-wrapper {
+            margin-top: auto;
+            border-top: 1px solid #252525;
+            padding-top: 12px;
+        }
+        .playlist-title-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-main);
+            margin-bottom: 8px;
+        }
+
+        .playlist-nodes {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .playlist-item {
+            background: var(--bg-element);
+            border: 1px solid #252525;
+            padding: 8px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .playlist-item:hover {
+            border-color: var(--gold-main);
+            background: rgba(205, 162, 80, 0.05);
+        }
+
+        .playlist-item .ep-number {
+            color: var(--gold-main);
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .management-actions button {
             background: none;
             border: none;
-            font-family: inherit;
             cursor: pointer;
-            font-size: 13px;
-            margin-left: 10px;
-            text-transform: uppercase;
+            font-size: 11px;
             letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-left: 12px;
         }
+        .btn-edit { color: var(--gold-main); }
+        .btn-delete { color: #8b2626; }
+        .btn-delete:hover { color: #ff4d4d; }
 
-        .action-edit { color: var(--gold-primary); }
-        .action-delete { color: #ff4d4d; }
-
-        .episode-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .episode-item {
-            padding: 10px 0;
-            border-bottom: 1px dashed rgba(255,255,255,0.05);
-        }
-
-        .episode-item:last-child {
-            border-bottom: none;
-        }
-
-        .ep-title {
-            color: var(--gold-primary);
-            font-size: 14px;
+        .now-playing-tag {
+            background: var(--gold-gradient);
+            color: #000;
+            font-size: 8px;
             font-weight: bold;
-            margin-bottom: 4px;
-        }
-
-        .ep-subtitle {
-            font-size: 13px;
-            color: var(--text-muted);
-            white-space: pre-wrap;
-        }
-
-        .no-data {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 40px;
-            font-style: italic;
-            border: 1px dashed rgba(212, 175, 55, 0.2);
+            padding: 2px 5px;
+            text-transform: uppercase;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Vellum Vault</h1>
-        <div id="status" class="status-bar">Synchronizing with luxury cloud archives...</div>
+        <h1>Aether Cinema Vault</h1>
+        <div id="status-engine" class="status-bar">Connecting to high-fidelity cloud streams...</div>
     </header>
 
-    <main>
+    <div class="workspace">
         <section class="panel">
-            <h2 id="form-heading">Curate Content</h2>
-            <form id="media-form">
-                <input type="hidden" id="edit-index" value="">
+            <h2 id="form-heading">Curate Masterpiece</h2>
+            <form id="vault-form">
+                <input type="hidden" id="edit-index-token" value="">
                 
                 <div class="form-group">
-                    <label for="content-title">Collection Title</label>
-                    <input type="text" id="content-title" placeholder="e.g., House of Dragons" required>
+                    <label>Collection Title</label>
+                    <input type="text" id="main-title" placeholder="e.g., Chrono Cross Anthology" required>
                 </div>
 
-                <div id="episodes-container">
+                <div class="form-group">
+                    <label>Cover Photo Landscape URL <span class="optional">(optional)</span></label>
+                    <input type="text" id="cover-url" placeholder="https://domain.com/image.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label>Synopsis / Narrative Context <span class="optional">(optional)</span></label>
+                    <textarea id="synopsis" rows="3" placeholder="Enter continuous structural lore configurations..."></textarea>
+                </div>
+
+                <div id="episodes-form-stage">
                     </div>
 
-                <button type="button" class="btn-secondary" id="add-ep-btn">+ Append Episode</button>
-                <button type="submit" class="btn-gold" id="submit-btn">Save Asset</button>
-                <button type="button" class="btn-secondary" id="cancel-btn" style="display: none; width: 100%; margin-top: 10px; border-color: #666; color: #aaa;">Cancel Edit</button>
+                <button type="button" class="btn-action-dim" id="add-episode-node">+ Add Episode Element</button>
+                <button type="submit" class="btn-prime" id="submit-btn">Commit to Archive</button>
+                <button type="button" class="btn-action-dim" id="cancel-edit-btn" style="display: none; width: 100%; margin-top: 10px; border-color: #444; color: #888;">Abandon Changes</button>
             </form>
         </section>
 
-        <section id="vault-feed">
-            </section>
-    </main>
+        <section class="theater-room">
+            <div class="cinema-screen-container">
+                <video id="cinema-lens" controls playsinline>
+                    <div id="subtitles-track-node"></div>
+                </video>
+            </div>
+
+            <div id="vault-display-track" class="vault-grid">
+                </div>
+        </section>
+    </div>
 
     <script>
-        // API Configuration Target
+        // Synchronized Infrastructure Access Credentials
         const BIN_ID = '6a0404daadc21f119a9187db';
         const MASTER_KEY = '$2a$10$/lTihGKHTbTAQptFHCYKq.qt3eIZPbbEm9GgTbpfp71Dm29bG53Nq';
-        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        const CONFIG_ENDPOINT = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-        // Local State Array Cache
-        let vaultItems = [];
+        let synchronizedCacheArray = [];
 
-        // DOM Pointers
-        const mediaForm = document.getElementById('media-form');
-        const episodesContainer = document.getElementById('episodes-container');
-        const addEpBtn = document.getElementById('add-ep-btn');
-        const vaultFeed = document.getElementById('vault-feed');
-        const statusText = document.getElementById('status');
-        const editIndexInput = document.getElementById('edit-index');
+        // UI Core Targets
+        const vaultForm = document.getElementById('vault-form');
+        const episodesFormStage = document.getElementById('episodes-form-stage');
+        const addEpisodeNodeBtn = document.getElementById('add-episode-node');
+        const vaultDisplayTrack = document.getElementById('vault-display-track');
+        const statusEngine = document.getElementById('status-engine');
+        const editIndexToken = document.getElementById('edit-index-token');
         const formHeading = document.getElementById('form-heading');
         const submitBtn = document.getElementById('submit-btn');
-        const cancelBtn = document.getElementById('cancel-btn');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const cinemaLens = document.getElementById('cinema-lens');
 
-        // Fetch Vault from JSONBin
-        async function fetchVault() {
-            updateStatus("Updating local cache from cloud infrastructure...");
+        // Fetch Pipeline Setup
+        async function loadCloudVault() {
+            logStatus("Fetching remote master database records...");
             try {
-                const response = await fetch(API_URL, {
+                const response = await fetch(CONFIG_ENDPOINT, {
                     method: 'GET',
                     headers: { 'X-Master-Key': MASTER_KEY }
                 });
-                if (!response.ok) throw new Error("Cloud sync breakdown.");
+                if (!response.ok) throw new Error("Channel configuration drop.");
                 const data = await response.json();
-                
-                // Safety logic if bin structure is brand new or empty array
-                vaultItems = Array.isArray(data.record) ? data.record : [];
-                renderVault();
-                updateStatus("Vault Synchronized.");
+                synchronizedCacheArray = Array.isArray(data.record) ? data.record : [];
+                renderStructuralCatalog();
+                logStatus("Vault Sync Complete.");
             } catch (error) {
                 console.error(error);
-                updateStatus("Synchronization Failed. Offline local simulation running.");
+                logStatus("Sync disruption. Running on fallback simulation.");
             }
         }
 
-        // Push/Sync current array architecture to JSONBin
-        async function syncToCloud() {
-            updateStatus("Pushing collection modifications securely...");
+        // Commit Push Pipeline
+        async function writeCloudVault() {
+            logStatus("Encrypting and transmitting architectural edits...");
             try {
-                const response = await fetch(API_URL, {
+                const response = await fetch(CONFIG_ENDPOINT, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Master-Key': MASTER_KEY
                     },
-                    body: JSON.stringify(vaultItems)
+                    body: JSON.stringify(synchronizedCacheArray)
                 });
-                if (!response.ok) throw new Error("Failed to write upstream.");
-                updateStatus("Cloud Architecture Synchronized Successfully.");
-                renderVault();
+                if (!response.ok) throw new Error("Upstream verification denied.");
+                logStatus("Cloud Matrix Updated Instantly.");
+                renderStructuralCatalog();
             } catch (error) {
                 console.error(error);
-                updateStatus("Cloud push failed. Saved strictly locally.");
+                logStatus("Push crashed. System holding data in memory.");
             }
         }
 
-        function updateStatus(msg) {
-            statusText.innerText = `Status: ${msg}`;
+        function logStatus(msg) {
+            statusEngine.innerText = `System Status: ${msg}`;
         }
 
-        // Create HTML structural nodes for episodes dynamically
-        function createEpisodeRow(title = '', subtitle = '') {
+        // Generate Dynamic Episode Inputs inside the Curation Panel
+        function appendEpisodeInputNode(title = '', mediaUrl = '', trackContent = '') {
             const div = document.createElement('div');
-            div.className = 'episode-row';
+            div.className = 'episode-builder-card';
             div.innerHTML = `
-                <button type="button" class="btn-remove-ep" onclick="this.parentElement.remove()">✕</button>
+                <button type="button" class="btn-remove-node" onclick="this.parentElement.remove()">✕</button>
                 <div class="form-group">
-                    <label>Episode Title / Number</label>
-                    <input type="text" class="ep-title-input" placeholder="e.g., Episode 01: The Legacy" value="${title}" required>
+                    <label>Episode Naming Title <span class="optional">(optional - defaults to ordered indexing)</span></label>
+                    <input type="text" class="input-ep-title" placeholder="e.g., Episode 01: Awakening" value="${title}">
                 </div>
                 <div class="form-group">
-                    <label>English Dialogue / Subtitles</label>
-                    <textarea class="ep-sub-input" rows="3" placeholder="Paste structural dialogues or plain text records here..." required>${subtitle}</textarea>
+                    <label>Video URL Asset (.mp4 / .m3u8)</label>
+                    <input type="text" class="input-ep-media" placeholder="https://domain.com/stream.mp4" value="${mediaUrl}" required>
+                </div>
+                <div class="form-group">
+                    <label>WebVTT Structural Text Dialogue Subtitles</label>
+                    <textarea class="input-ep-tracks" rows="3" placeholder="WEBVTT\\n\\n00:01.000 --> 00:04.000\\nSample text dialogue..." required>${trackContent}</textarea>
                 </div>
             `;
-            episodesContainer.appendChild(div);
+            episodesFormStage.appendChild(div);
         }
 
-        // Parse visual vault feed cards
-        function renderVault() {
-            vaultFeed.innerHTML = '';
-            if (vaultItems.length === 0) {
-                vaultFeed.innerHTML = `<div class="no-data">The vault is currently vacant. Curate your initial items.</div>`;
+        // Construct Layout Feeds & Sort Playlists Alphabetically / Numerically (Ascending)
+        function renderStructuralCatalog() {
+            vaultDisplayTrack.innerHTML = '';
+            if (synchronizedCacheArray.length === 0) {
+                vaultDisplayTrack.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-dim); border:1px dashed #333;">Cinema Core Archive is currently empty.</div>`;
                 return;
             }
 
-            vaultItems.forEach((item, index) => {
+            synchronizedCacheArray.forEach((collection, collectionIdx) => {
                 const card = document.createElement('div');
-                card.className = 'content-card';
-                
-                let episodeHTML = '';
-                if(item.episodes && item.episodes.length > 0) {
-                    item.episodes.forEach(ep => {
-                        episodeHTML += `
-                            <li class="episode-item">
-                                <div class="ep-title">${escapeHTML(ep.title)}</div>
-                                <div class="ep-subtitle">${escapeHTML(ep.subtitle)}</div>
-                            </li>
-                        `;
+                card.className = 'showcase-card';
+
+                const bannerImg = collection.coverUrl ? collection.coverUrl : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500&auto=format&fit=crop';
+                const plotSummary = collection.synopsis ? collection.synopsis : 'No further narrative information has been logged for this catalog record.';
+
+                // Ascending Alphanumeric Sorting Logic applied to Episode arrays
+                let sortedEpisodes = [];
+                if (collection.episodes && collection.episodes.length > 0) {
+                    sortedEpisodes = [...collection.episodes].sort((a, b) => {
+                        const titleA = a.title ? a.title.toLowerCase() : `episode ${String(collection.episodes.indexOf(a)).padStart(5, '0')}`;
+                        const titleB = b.title ? b.title.toLowerCase() : `episode ${String(collection.episodes.indexOf(b)).padStart(5, '0')}`;
+                        return titleA.localeCompare(titleB, undefined, { numeric: true, sensitivity: 'base' });
                     });
-                } else {
-                    episodeHTML = `<li class="episode-item" style="color:var(--text-muted); font-style:italic;">No structural episodes attached.</li>`;
                 }
+
+                let playlistHTML = '';
+                sortedEpisodes.forEach((ep, sortedIdx) => {
+                    const printTitle = ep.title ? ep.title : `Episode ${String(sortedIdx + 1).padStart(2, '0')}`;
+                    
+                    // Create base operational string to serialize complete stream components inside structural layout variables safely
+                    const serializedPayload = encodeURIComponent(JSON.stringify(ep));
+
+                    playlistHTML += `
+                        <div class="playlist-item" onclick="mountCinemaStream('${serializedPayload}', this)">
+                            <div>
+                                <span class="ep-number">✦</span> ${escapeHTML(printTitle)}
+                            </div>
+                            <div class="status-marker"></div>
+                        </div>
+                    `;
+                });
 
                 card.innerHTML = `
-                    <div class="card-header">
-                        <h3 class="card-title">${escapeHTML(item.title)}</h3>
-                        <div class="card-actions">
-                            <button class="action-edit" onclick="initiateEdit(${index})">Edit</button>
-                            <button class="action-delete" onclick="deleteItem(${index})">Delete</button>
+                    <div class="showcase-banner" style="background-image: url('${escapeHTML(bannerImg)}');"></div>
+                    <div class="showcase-details">
+                        <div class="showcase-meta-header">
+                            <h3 class="showcase-title">${escapeHTML(collection.title)}</h3>
+                            <div class="management-actions">
+                                <button class="btn-edit" onclick="openEditorEngine(${collectionIdx})">Edit</button>
+                                <button class="btn-delete" onclick="killCatalogNode(${collectionIdx})">Remove</button>
+                            </div>
+                        </div>
+                        <p class="showcase-synopsis">${escapeHTML(plotSummary)}</p>
+                        
+                        <div class="playlist-wrapper">
+                            <div class="playlist-title-label">Ascending Media Tracks</div>
+                            <div class="playlist-nodes">${playlistHTML}</div>
                         </div>
                     </div>
-                    <ul class="episode-list">
-                        ${episodeHTML}
-                    </ul>
                 `;
-                vaultFeed.appendChild(card);
+                vaultDisplayTrack.appendChild(card);
             });
         }
 
-        // Handle Submission Engine (Create & Update actions)
-        mediaForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const title = document.getElementById('content-title').value;
-            const rows = episodesContainer.querySelectorAll('.episode-row');
-            const episodes = [];
-
-            rows.forEach(row => {
-                episodes.push({
-                    title: row.querySelector('.ep-title-input').value,
-                    subtitle: row.querySelector('.ep-sub-input').value
-                });
-            });
-
-            const targetIndex = editIndexInput.value;
-
-            if (targetIndex === "") {
-                // Creation Route
-                vaultItems.push({ title, episodes });
-            } else {
-                // Update Route
-                vaultItems[parseInt(targetIndex)] = { title, episodes };
-                clearEditState();
-            }
-
-            // Sync structural modification back to the bin
-            await syncToCloud();
-            mediaForm.reset();
-            episodesContainer.innerHTML = '';
-        });
-
-        // Setup Form UI inputs to enter dynamic Update mode
-        window.initiateEdit = function(index) {
-            const targetItem = vaultItems[index];
-            formHeading.innerText = "Refine Asset Architecture";
-            submitBtn.innerText = "Apply Updates";
-            editIndexInput.value = index;
-            cancelBtn.style.display = "block";
-
-            document.getElementById('content-title').value = targetItem.title;
-            episodesContainer.innerHTML = '';
-            
-            if(targetItem.episodes) {
-                targetItem.episodes.forEach(ep => {
-                    createEpisodeRow(ep.title, ep.subtitle);
-                });
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        // Remove array key asset and trigger sync updating cycle
-        window.deleteItem = async function(index) {
-            if (confirm("Are you sure you want to permanently delete this asset from the vault?")) {
-                vaultItems.splice(index, 1);
-                if(editIndexInput.value == index) {
-                    clearEditState();
-                    mediaForm.reset();
-                    episodesContainer.innerHTML = '';
-                }
-                await syncToCloud();
-            }
-        };
-
-        function clearEditState() {
-            formHeading.innerText = "Curate Content";
-            submitBtn.innerText = "Save Asset";
-            editIndexInput.value = "";
-            cancelBtn.style.display = "none";
-        }
-
-        cancelBtn.addEventListener('click', () => {
-            clearEditState();
-            mediaForm.reset();
-            episodesContainer.innerHTML = '';
-        });
-
-        addEpBtn.addEventListener('click', () => createEpisodeRow());
-
-        // Basic XSS string escaping protection utility
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
-        }
-
-        // Run the Application Pipeline on Load initialization
-        fetchVault();
-    </script>
-</body>
-</html>
-
+        // Native System Player Allocation Controller
+        window.mountCinemaStream = function(payloadString, elementDomRef) {
+            // Unmark active highlights across other elements
+            document.qu
