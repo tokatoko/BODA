@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PWA Video Player Testing</title>
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -108,7 +108,6 @@
 </head>
 <body>
 
-<!-- Startup Install Modal -->
 <div id="install-modal" class="modal-overlay">
     <div class="modal-content">
         <h3>Install Video Player</h3>
@@ -123,10 +122,9 @@
 <div class="container">
     <h2>Testing Video Player & Offline Capabilities</h2>
     
-    <!-- Plyr Video Player Element -->
     <video id="player" playsinline controls>
         <source src="https://upos-sz-mirrorcosbstar1.bilivideo.com/iupxcodeboss/97/vz/n241115ad2ktqsyo272odz2w3nmwvz97-1-112111110023.mp4?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&trid=cd56d9a8faf44c6bacfebaa975231936i&mid=0&nbs=1&deadline=1780315167&os=cosbstar1bv&platform=html5&uipk=5&gen=playurlv3&oi=3106758546&upsig=90f2ef71727628dee8103d29aa02f6e7&uparams=e,trid,mid,nbs,deadline,os,platform,uipk,gen,oi&bvc=vod&orderid=1,2&logo=00000000&f=i_0_0" type="video/mp4" />
-        <track kind="subtitles" label="English Test" srclang="en" src="subtitles.vtt" default />
+        <track kind="subtitles" label="English Test" srclang="en" src="./subtitles.vtt" default />
     </video>
 
     <div class="controls">
@@ -135,7 +133,6 @@
     </div>
 </div>
 
-<!-- Plyr JS -->
 <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 <script>
     // Initialize Plyr
@@ -150,7 +147,6 @@
 
     // Show modal automatically at the beginning
     window.addEventListener('load', () => {
-        // Optional: Check if user already dismissed it this session
         if (!sessionStorage.getItem('modalDismissed')) {
             installModal.classList.add('show');
         }
@@ -158,29 +154,20 @@
 
     // Handle the browser's PWA installation trigger
     window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();
-        // Stash the event so it can be triggered later.
         deferredPrompt = e;
-        
-        // Update UI to signify native installation is ready
         modalInstallBtn.innerText = "Install Native App";
     });
 
     // Install Button Click Logic
     modalInstallBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
-            // Show the browser's native install prompt
             deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
             const { outcome } = await deferredPrompt.userChoice;
             console.log(`User response to the install prompt: ${outcome}`);
-            // We've used the prompt, and can't use it again
             deferredPrompt = null;
-            // Close modal
             installModal.classList.remove('show');
         } else {
-            // Fallback for browsers/platforms where beforeinstallprompt isn't fired or supported (e.g., iOS Safari)
             alert("To install: Tap your browser's menu option (or Share button on iOS) and select 'Add to Home Screen'.");
             installModal.classList.remove('show');
         }
@@ -189,20 +176,17 @@
     // Close Modal Button Logic
     modalCloseBtn.addEventListener('click', () => {
         installModal.classList.remove('show');
-        // Prevent it from popping back up instantly if they refresh during the testing session
         sessionStorage.setItem('modalDismissed', 'true');
     });
 
-    // Register Service Worker
-      if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        // Adding { scope: './' } ensures it aligns perfectly with manifest.json
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-            .then(reg => console.log('Service Worker registered successfully with scope:', reg.scope))
-            .catch(err => console.error('Service Worker registration failed: ', err));
-    });
-      }
-    
+    // Register Service Worker with exact relative subdirectory scope
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js', { scope: './' })
+                .then(reg => console.log('Service Worker registered successfully with scope:', reg.scope))
+                .catch(err => console.error('Service Worker registration failed: ', err));
+        });
+    }
 
     // Video Download Logic
     const videoUrl = document.querySelector('source').src;
