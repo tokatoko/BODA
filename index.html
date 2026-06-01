@@ -42,16 +42,90 @@
             font-style: italic;
             color: #bbb;
         }
+
+        /* --- Welcome / Install Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background: #222;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            color: #00bfff;
+        }
+        .modal-content p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .modal-actions {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .modal-btn-install {
+            background-color: #00bfff;
+            color: #fff;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .modal-btn-close {
+            background-color: transparent;
+            color: #aaa;
+            border: 1px solid #444;
+            padding: 10px;
+        }
+        .modal-btn-close:hover {
+            color: #fff;
+            background: #333;
+        }
     </style>
 </head>
 <body>
 
+<!-- Startup Install Modal -->
+<div id="install-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Install Video Player</h3>
+        <p>Install this app on your device to enable seamless offline viewing and launch it directly from your home screen.</p>
+        <div class="modal-actions">
+            <button id="modal-install-btn" class="modal-btn-install">Install App</button>
+            <button id="modal-close-btn" class="modal-btn-close">Maybe Later (Close)</button>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <h2>Testing Video Player & Offline Capabilities</h2>
     
+    <!-- Plyr Video Player Element -->
     <video id="player" playsinline controls>
         <source src="https://upos-sz-mirrorcosbstar1.bilivideo.com/iupxcodeboss/97/vz/n241115ad2ktqsyo272odz2w3nmwvz97-1-112111110023.mp4?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&trid=cd56d9a8faf44c6bacfebaa975231936i&mid=0&nbs=1&deadline=1780315167&os=cosbstar1bv&platform=html5&uipk=5&gen=playurlv3&oi=3106758546&upsig=90f2ef71727628dee8103d29aa02f6e7&uparams=e,trid,mid,nbs,deadline,os,platform,uipk,gen,oi&bvc=vod&orderid=1,2&logo=00000000&f=i_0_0" type="video/mp4" />
-        
         <track kind="subtitles" label="English Test" srclang="en" src="subtitles.vtt" default />
     </video>
 
@@ -61,26 +135,78 @@
     </div>
 </div>
 
+<!-- Plyr JS -->
 <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 <script>
     // Initialize Plyr
     const player = new Plyr('#player');
 
-    // Register Service Worker for GitHub Pages compatibility
+    // Modal Elements
+    const installModal = document.getElementById('install-modal');
+    const modalInstallBtn = document.getElementById('modal-install-btn');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+
+    let deferredPrompt;
+
+    // Show modal automatically at the beginning
+    window.addEventListener('load', () => {
+        // Optional: Check if user already dismissed it this session
+        if (!sessionStorage.getItem('modalDismissed')) {
+            installModal.classList.add('show');
+        }
+    });
+
+    // Handle the browser's PWA installation trigger
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        
+        // Update UI to signify native installation is ready
+        modalInstallBtn.innerText = "Install Native App";
+    });
+
+    // Install Button Click Logic
+    modalInstallBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            // Show the browser's native install prompt
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            // We've used the prompt, and can't use it again
+            deferredPrompt = null;
+            // Close modal
+            installModal.classList.remove('show');
+        } else {
+            // Fallback for browsers/platforms where beforeinstallprompt isn't fired or supported (e.g., iOS Safari)
+            alert("To install: Tap your browser's menu option (or Share button on iOS) and select 'Add to Home Screen'.");
+            installModal.classList.remove('show');
+        }
+    });
+
+    // Close Modal Button Logic
+    modalCloseBtn.addEventListener('click', () => {
+        installModal.classList.remove('show');
+        // Prevent it from popping back up instantly if they refresh during the testing session
+        sessionStorage.setItem('modalDismissed', 'true');
+    });
+
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
                 .then(reg => console.log('Service Worker registered!', reg))
-                .catch(err => console.err('Service Worker registration failed: ', err));
+                .catch(err => console.error('Service Worker registration failed: ', err));
         });
     }
 
-    // Video URL to Cache
+    // Video Download Logic
     const videoUrl = document.querySelector('source').src;
     const downloadBtn = document.getElementById('download-btn');
     const statusText = document.getElementById('status');
 
-    // Check if already downloaded on load
     window.addEventListener('DOMContentLoaded', async () => {
         const cache = await caches.open('video-cache-v1');
         const match = await cache.match(videoUrl);
@@ -91,20 +217,18 @@
         }
     });
 
-    // Download Logic via Cache API
     downloadBtn.addEventListener('click', async () => {
         statusText.innerText = "Status: Downloading... Please wait.";
         downloadBtn.disabled = true;
 
         try {
             const cache = await caches.open('video-cache-v1');
-            // Fetch and cache the video asset
             await cache.add(videoUrl);
             statusText.innerText = "Status: Download Complete! Test offline mode now.";
             downloadBtn.innerText = "Downloaded 🎉";
         } catch (error) {
             console.error("Download failed:", error);
-            statusText.innerText = "Status: Download failed. (Check CORS configuration of the asset link)";
+            statusText.innerText = "Status: Download failed. (CORS issue or stream link expired)";
             downloadBtn.disabled = false;
         }
     });
