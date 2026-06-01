@@ -110,11 +110,11 @@
 
 <div id="install-modal" class="modal-overlay">
     <div class="modal-content">
-        <h3>Install Video Player</h3>
-        <p>Install this app on your device to enable seamless offline viewing and launch it directly from your home screen.</p>
+        <h3>Install App</h3>
+        <p>Install this application directly onto your system to unlock standalone offline viewing.</p>
         <div class="modal-actions">
-            <button id="modal-install-btn" class="modal-btn-install">Install App</button>
-            <button id="modal-close-btn" class="modal-btn-close">Maybe Later (Close)</button>
+            <button id="modal-install-btn" class="modal-btn-install" disabled>Waiting for App System...</button>
+            <button id="modal-close-btn" class="modal-btn-close">Close</button>
         </div>
     </div>
 </div>
@@ -135,60 +135,55 @@
 
 <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 <script>
-    // Initialize Plyr
     const player = new Plyr('#player');
-
-    // Modal Elements
     const installModal = document.getElementById('install-modal');
     const modalInstallBtn = document.getElementById('modal-install-btn');
     const modalCloseBtn = document.getElementById('modal-close-btn');
 
-    let deferredPrompt;
+    let deferredPrompt = null;
 
-    // Show modal automatically at the beginning
+    // Show modal immediately on load
     window.addEventListener('load', () => {
         if (!sessionStorage.getItem('modalDismissed')) {
             installModal.classList.add('show');
         }
     });
 
-    // Handle the browser's PWA installation trigger
+    // Capture the true native install prompt event
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        modalInstallBtn.innerText = "Install Native App";
+        
+        // Active the button once the manifest and service worker satisfy the OS requirements
+        modalInstallBtn.removeAttribute('disabled');
+        modalInstallBtn.innerText = "Install Globally";
     });
 
-    // Install Button Click Logic
     modalInstallBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response to the install prompt: ${outcome}`);
+            console.log(`PWA Installation Result: ${outcome}`);
             deferredPrompt = null;
-            installModal.classList.remove('show');
-        } else {
-            alert("To install: Tap your browser's menu option (or Share button on iOS) and select 'Add to Home Screen'.");
             installModal.classList.remove('show');
         }
     });
 
-    // Close Modal Button Logic
     modalCloseBtn.addEventListener('click', () => {
         installModal.classList.remove('show');
         sessionStorage.setItem('modalDismissed', 'true');
     });
 
-    // Register Service Worker with exact relative subdirectory scope
+    // Precise relative SW registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js', { scope: './' })
-                .then(reg => console.log('Service Worker registered successfully with scope:', reg.scope))
-                .catch(err => console.error('Service Worker registration failed: ', err));
+                .then(reg => console.log('SW Registration Match Dynamic Scope:', reg.scope))
+                .catch(err => console.error('SW Registration Broke:', err));
         });
     }
 
-    // Video Download Logic
+    // Dynamic Video Cache API Controller
     const videoUrl = document.querySelector('source').src;
     const downloadBtn = document.getElementById('download-btn');
     const statusText = document.getElementById('status');
@@ -204,17 +199,17 @@
     });
 
     downloadBtn.addEventListener('click', async () => {
-        statusText.innerText = "Status: Downloading... Please wait.";
+        statusText.innerText = "Status: Buffering Download...";
         downloadBtn.disabled = true;
 
         try {
             const cache = await caches.open('video-cache-v1');
             await cache.add(videoUrl);
-            statusText.innerText = "Status: Download Complete! Test offline mode now.";
+            statusText.innerText = "Status: Completed Offline Storage!";
             downloadBtn.innerText = "Downloaded 🎉";
         } catch (error) {
-            console.error("Download failed:", error);
-            statusText.innerText = "Status: Download failed. (CORS issue or stream link expired)";
+            console.error("Cache System Exception:", error);
+            statusText.innerText = "Status: Storage error (Check if token link is expired)";
             downloadBtn.disabled = false;
         }
     });
