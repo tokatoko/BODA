@@ -3,217 +3,506 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA Video Player Testing</title>
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <link rel="manifest" href="./manifest.json">
+    <title>Luxury Media Manager</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #121212;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            width: 100%;
-        }
-        .controls {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #00bfff;
-            border: none;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        button:disabled {
-            background-color: #555;
-        }
-        #status {
-            font-style: italic;
-            color: #bbb;
+        /* --- Luxury & Gold Theme Colors --- */
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #242424;
+            --gold-primary: #d4af37;
+            --gold-hover: #f3e5ab;
+            --gold-gradient: linear-gradient(135deg, #b38728, #fbf5b7, #daa520, #aa771c);
+            --text-main: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --border-gold: 1px solid rgba(212, 175, 55, 0.3);
         }
 
-        /* --- Welcome / Install Modal Styles --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-content {
-            background: #222;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-            border: 1px solid #333;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        .modal-content h3 {
-            margin-top: 0;
-            color: #00bfff;
-        }
-        .modal-content p {
-            color: #ccc;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .modal-actions {
-            margin-top: 25px;
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            align-items: center;
         }
-        .modal-btn-install {
-            background-color: #00bfff;
-            color: #fff;
-            padding: 12px;
-            font-size: 16px;
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: var(--border-gold);
+            padding-bottom: 20px;
+            width: 100%;
+            max-width: 900px;
         }
-        .modal-btn-close {
-            background-color: transparent;
-            color: #aaa;
+
+        header h1 {
+            font-weight: 300;
+            letter-spacing: 4px;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .status-bar {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: var(--gold-primary);
+            font-style: italic;
+        }
+
+        main {
+            width: 100%;
+            max-width: 900px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                grid-template-columns: 350px 1fr;
+            }
+        }
+
+        /* --- Luxury Form Styling --- */
+        .panel {
+            background-color: var(--bg-secondary);
+            border: var(--border-gold);
+            border-radius: 4px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            height: fit-content;
+        }
+
+        .panel h2 {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            box-sizing: border-box;
+            background-color: var(--bg-primary);
             border: 1px solid #444;
-            padding: 10px;
+            color: var(--text-main);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 14px;
+            border-radius: 2px;
+            transition: border 0.3s ease;
         }
-        .modal-btn-close:hover {
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border: 1px solid var(--gold-primary);
+        }
+
+        .episode-row {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 2px solid var(--gold-primary);
+            position: relative;
+        }
+
+        .btn-remove-ep {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* --- Elite Buttons --- */
+        button.btn-gold {
+            width: 100%;
+            padding: 12px;
+            background: var(--gold-gradient);
+            border: none;
+            color: #000;
+            font-weight: bold;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            border-radius: 2px;
+            margin-top: 10px;
+        }
+
+        button.btn-gold:hover {
+            opacity: 0.9;
+        }
+
+        button.btn-secondary {
+            background: transparent;
+            border: 1px solid var(--gold-primary);
+            color: var(--gold-primary);
+            padding: 8px 12px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        button.btn-secondary:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* --- Content List Styling --- */
+        .content-card {
+            background-color: var(--bg-card);
+            border: var(--border-gold);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 3px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 300;
+            margin: 0;
             color: #fff;
-            background: #333;
+            letter-spacing: 1px;
+        }
+
+        .card-actions button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-edit { color: var(--gold-primary); }
+        .action-delete { color: #ff4d4d; }
+
+        .episode-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .episode-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+        }
+
+        .episode-item:last-child {
+            border-bottom: none;
+        }
+
+        .ep-title {
+            color: var(--gold-primary);
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .ep-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            white-space: pre-wrap;
+        }
+
+        .no-data {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px;
+            font-style: italic;
+            border: 1px dashed rgba(212, 175, 55, 0.2);
         }
     </style>
 </head>
 <body>
 
-<div id="install-modal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>Install App</h3>
-        <p>Install this application directly onto your system to unlock standalone offline viewing.</p>
-        <div class="modal-actions">
-            <button id="modal-install-btn" class="modal-btn-install" disabled>Waiting for App System...</button>
-            <button id="modal-close-btn" class="modal-btn-close">Close</button>
-        </div>
-    </div>
-</div>
+    <header>
+        <h1>Vellum Vault</h1>
+        <div id="status" class="status-bar">Synchronizing with luxury cloud archives...</div>
+    </header>
 
-<div class="container">
-    <h2>Testing Video Player & Offline Capabilities</h2>
-    
-    <video id="player" playsinline controls>
-        <source src="https://upos-sz-mirrorcosbstar1.bilivideo.com/iupxcodeboss/97/vz/n241115ad2ktqsyo272odz2w3nmwvz97-1-112111110023.mp4?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&trid=cd56d9a8faf44c6bacfebaa975231936i&mid=0&nbs=1&deadline=1780315167&os=cosbstar1bv&platform=html5&uipk=5&gen=playurlv3&oi=3106758546&upsig=90f2ef71727628dee8103d29aa02f6e7&uparams=e,trid,mid,nbs,deadline,os,platform,uipk,gen,oi&bvc=vod&orderid=1,2&logo=00000000&f=i_0_0" type="video/mp4" />
-        <track kind="subtitles" label="English Test" srclang="en" src="./subtitles.vtt" default />
-    </video>
+    <main>
+        <section class="panel">
+            <h2 id="form-heading">Curate Content</h2>
+            <form id="media-form">
+                <input type="hidden" id="edit-index" value="">
+                
+                <div class="form-group">
+                    <label for="content-title">Collection Title</label>
+                    <input type="text" id="content-title" placeholder="e.g., House of Dragons" required>
+                </div>
 
-    <div class="controls">
-        <button id="download-btn">Download Video for Offline</button>
-        <span id="status">Status: Ready</span>
-    </div>
-</div>
+                <div id="episodes-container">
+                    </div>
 
-<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
-<script>
-    const player = new Plyr('#player');
-    const installModal = document.getElementById('install-modal');
-    const modalInstallBtn = document.getElementById('modal-install-btn');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
+                <button type="button" class="btn-secondary" id="add-ep-btn">+ Append Episode</button>
+                <button type="submit" class="btn-gold" id="submit-btn">Save Asset</button>
+                <button type="button" class="btn-secondary" id="cancel-btn" style="display: none; width: 100%; margin-top: 10px; border-color: #666; color: #aaa;">Cancel Edit</button>
+            </form>
+        </section>
 
-    let deferredPrompt = null;
+        <section id="vault-feed">
+            </section>
+    </main>
 
-    // Show modal immediately on load
-    window.addEventListener('load', () => {
-        if (!sessionStorage.getItem('modalDismissed')) {
-            installModal.classList.add('show');
+    <script>
+        // API Configuration Target
+        const BIN_ID = '6a0404daadc21f119a9187db';
+        const MASTER_KEY = '$2a$10$/lTihGKHTbTAQptFHCYKq.qt3eIZPbbEm9GgTbpfp71Dm29bG53Nq';
+        const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+        // Local State Array Cache
+        let vaultItems = [];
+
+        // DOM Pointers
+        const mediaForm = document.getElementById('media-form');
+        const episodesContainer = document.getElementById('episodes-container');
+        const addEpBtn = document.getElementById('add-ep-btn');
+        const vaultFeed = document.getElementById('vault-feed');
+        const statusText = document.getElementById('status');
+        const editIndexInput = document.getElementById('edit-index');
+        const formHeading = document.getElementById('form-heading');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+        // Fetch Vault from JSONBin
+        async function fetchVault() {
+            updateStatus("Updating local cache from cloud infrastructure...");
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: { 'X-Master-Key': MASTER_KEY }
+                });
+                if (!response.ok) throw new Error("Cloud sync breakdown.");
+                const data = await response.json();
+                
+                // Safety logic if bin structure is brand new or empty array
+                vaultItems = Array.isArray(data.record) ? data.record : [];
+                renderVault();
+                updateStatus("Vault Synchronized.");
+            } catch (error) {
+                console.error(error);
+                updateStatus("Synchronization Failed. Offline local simulation running.");
+            }
         }
-    });
 
-    // Capture the true native install prompt event
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        
-        // Active the button once the manifest and service worker satisfy the OS requirements
-        modalInstallBtn.removeAttribute('disabled');
-        modalInstallBtn.innerText = "Install Globally";
-    });
-
-    modalInstallBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`PWA Installation Result: ${outcome}`);
-            deferredPrompt = null;
-            installModal.classList.remove('show');
+        // Push/Sync current array architecture to JSONBin
+        async function syncToCloud() {
+            updateStatus("Pushing collection modifications securely...");
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': MASTER_KEY
+                    },
+                    body: JSON.stringify(vaultItems)
+                });
+                if (!response.ok) throw new Error("Failed to write upstream.");
+                updateStatus("Cloud Architecture Synchronized Successfully.");
+                renderVault();
+            } catch (error) {
+                console.error(error);
+                updateStatus("Cloud push failed. Saved strictly locally.");
+            }
         }
-    });
 
-    modalCloseBtn.addEventListener('click', () => {
-        installModal.classList.remove('show');
-        sessionStorage.setItem('modalDismissed', 'true');
-    });
+        function updateStatus(msg) {
+            statusText.innerText = `Status: ${msg}`;
+        }
 
-    // Precise relative SW registration
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js', { scope: './' })
-                .then(reg => console.log('SW Registration Match Dynamic Scope:', reg.scope))
-                .catch(err => console.error('SW Registration Broke:', err));
+        // Create HTML structural nodes for episodes dynamically
+        function createEpisodeRow(title = '', subtitle = '') {
+            const div = document.createElement('div');
+            div.className = 'episode-row';
+            div.innerHTML = `
+                <button type="button" class="btn-remove-ep" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-group">
+                    <label>Episode Title / Number</label>
+                    <input type="text" class="ep-title-input" placeholder="e.g., Episode 01: The Legacy" value="${title}" required>
+                </div>
+                <div class="form-group">
+                    <label>English Dialogue / Subtitles</label>
+                    <textarea class="ep-sub-input" rows="3" placeholder="Paste structural dialogues or plain text records here..." required>${subtitle}</textarea>
+                </div>
+            `;
+            episodesContainer.appendChild(div);
+        }
+
+        // Parse visual vault feed cards
+        function renderVault() {
+            vaultFeed.innerHTML = '';
+            if (vaultItems.length === 0) {
+                vaultFeed.innerHTML = `<div class="no-data">The vault is currently vacant. Curate your initial items.</div>`;
+                return;
+            }
+
+            vaultItems.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'content-card';
+                
+                let episodeHTML = '';
+                if(item.episodes && item.episodes.length > 0) {
+                    item.episodes.forEach(ep => {
+                        episodeHTML += `
+                            <li class="episode-item">
+                                <div class="ep-title">${escapeHTML(ep.title)}</div>
+                                <div class="ep-subtitle">${escapeHTML(ep.subtitle)}</div>
+                            </li>
+                        `;
+                    });
+                } else {
+                    episodeHTML = `<li class="episode-item" style="color:var(--text-muted); font-style:italic;">No structural episodes attached.</li>`;
+                }
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3 class="card-title">${escapeHTML(item.title)}</h3>
+                        <div class="card-actions">
+                            <button class="action-edit" onclick="initiateEdit(${index})">Edit</button>
+                            <button class="action-delete" onclick="deleteItem(${index})">Delete</button>
+                        </div>
+                    </div>
+                    <ul class="episode-list">
+                        ${episodeHTML}
+                    </ul>
+                `;
+                vaultFeed.appendChild(card);
+            });
+        }
+
+        // Handle Submission Engine (Create & Update actions)
+        mediaForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('content-title').value;
+            const rows = episodesContainer.querySelectorAll('.episode-row');
+            const episodes = [];
+
+            rows.forEach(row => {
+                episodes.push({
+                    title: row.querySelector('.ep-title-input').value,
+                    subtitle: row.querySelector('.ep-sub-input').value
+                });
+            });
+
+            const targetIndex = editIndexInput.value;
+
+            if (targetIndex === "") {
+                // Creation Route
+                vaultItems.push({ title, episodes });
+            } else {
+                // Update Route
+                vaultItems[parseInt(targetIndex)] = { title, episodes };
+                clearEditState();
+            }
+
+            // Sync structural modification back to the bin
+            await syncToCloud();
+            mediaForm.reset();
+            episodesContainer.innerHTML = '';
         });
-    }
 
-    // Dynamic Video Cache API Controller
-    const videoUrl = document.querySelector('source').src;
-    const downloadBtn = document.getElementById('download-btn');
-    const statusText = document.getElementById('status');
+        // Setup Form UI inputs to enter dynamic Update mode
+        window.initiateEdit = function(index) {
+            const targetItem = vaultItems[index];
+            formHeading.innerText = "Refine Asset Architecture";
+            submitBtn.innerText = "Apply Updates";
+            editIndexInput.value = index;
+            cancelBtn.style.display = "block";
 
-    window.addEventListener('DOMContentLoaded', async () => {
-        const cache = await caches.open('video-cache-v1');
-        const match = await cache.match(videoUrl);
-        if (match) {
-            downloadBtn.disabled = true;
-            downloadBtn.innerText = "Downloaded 🎉";
-            statusText.innerText = "Status: Available Offline";
+            document.getElementById('content-title').value = targetItem.title;
+            episodesContainer.innerHTML = '';
+            
+            if(targetItem.episodes) {
+                targetItem.episodes.forEach(ep => {
+                    createEpisodeRow(ep.title, ep.subtitle);
+                });
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Remove array key asset and trigger sync updating cycle
+        window.deleteItem = async function(index) {
+            if (confirm("Are you sure you want to permanently delete this asset from the vault?")) {
+                vaultItems.splice(index, 1);
+                if(editIndexInput.value == index) {
+                    clearEditState();
+                    mediaForm.reset();
+                    episodesContainer.innerHTML = '';
+                }
+                await syncToCloud();
+            }
+        };
+
+        function clearEditState() {
+            formHeading.innerText = "Curate Content";
+            submitBtn.innerText = "Save Asset";
+            editIndexInput.value = "";
+            cancelBtn.style.display = "none";
         }
-    });
 
-    downloadBtn.addEventListener('click', async () => {
-        statusText.innerText = "Status: Buffering Download...";
-        downloadBtn.disabled = true;
+        cancelBtn.addEventListener('click', () => {
+            clearEditState();
+            mediaForm.reset();
+            episodesContainer.innerHTML = '';
+        });
 
-        try {
-            const cache = await caches.open('video-cache-v1');
-            await cache.add(videoUrl);
-            statusText.innerText = "Status: Completed Offline Storage!";
-            downloadBtn.innerText = "Downloaded 🎉";
-        } catch (error) {
-            console.error("Cache System Exception:", error);
-            statusText.innerText = "Status: Storage error (Check if token link is expired)";
-            downloadBtn.disabled = false;
+        addEpBtn.addEventListener('click', () => createEpisodeRow());
+
+        // Basic XSS string escaping protection utility
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
         }
-    });
-</script>
+
+        // Run the Application Pipeline on Load initialization
+        fetchVault();
+    </script>
 </body>
 </html>
 
