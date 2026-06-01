@@ -1,7 +1,6 @@
-const CACHE_NAME = 'video-player-pwa-v1';
-const VIDEO_CACHE = 'video-cache-v1';
+const CACHE_NAME = 'video-player-pwa-v2';
 
-// Files to cache immediately for UI to function offline
+// Use strictly relative paths for GitHub Pages
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -11,33 +10,26 @@ const ASSETS_TO_CACHE = [
   'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js'
 ];
 
-// Install Event
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('SW: Caching core app shell assets');
+        return cache.addAll(ASSETS_TO_CACHE);
+      })
+      .catch(err => console.error('SW: Cache addAll failed! Check file names:', err))
   );
   self.skipWaiting();
 });
 
-// Activate Event
 self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-// Fetch Interceptor
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse; // Return from app asset cache or video cache
-      }
-      
-      // If not cached, fetch from network
-      return fetch(event.request).catch(() => {
-        // Fallback or handle offline failures gracefully
-      });
+      return cachedResponse || fetch(event.request);
     })
   );
 });
