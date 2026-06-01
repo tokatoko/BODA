@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Video Player Testing</title>
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #00bfff;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:disabled {
+            background-color: #555;
+        }
+        #status {
+            font-style: italic;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Testing Video Player & Offline Capabilities</h2>
+    
+    <video id="player" playsinline controls>
+        <source src="https://upos-sz-mirrorcosbstar1.bilivideo.com/iupxcodeboss/97/vz/n241115ad2ktqsyo272odz2w3nmwvz97-1-112111110023.mp4?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfq9rVEuxTEnE8L5F6VnEsSTx0vkX8fqJeYTj_lta53NCM=&trid=cd56d9a8faf44c6bacfebaa975231936i&mid=0&nbs=1&deadline=1780315167&os=cosbstar1bv&platform=html5&uipk=5&gen=playurlv3&oi=3106758546&upsig=90f2ef71727628dee8103d29aa02f6e7&uparams=e,trid,mid,nbs,deadline,os,platform,uipk,gen,oi&bvc=vod&orderid=1,2&logo=00000000&f=i_0_0" type="video/mp4" />
+        
+        <track kind="subtitles" label="English Test" srclang="en" src="subtitles.vtt" default />
+    </video>
+
+    <div class="controls">
+        <button id="download-btn">Download Video for Offline</button>
+        <span id="status">Status: Ready</span>
+    </div>
+</div>
+
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script>
+    // Initialize Plyr
+    const player = new Plyr('#player');
+
+    // Register Service Worker for GitHub Pages compatibility
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registered!', reg))
+                .catch(err => console.err('Service Worker registration failed: ', err));
+        });
+    }
+
+    // Video URL to Cache
+    const videoUrl = document.querySelector('source').src;
+    const downloadBtn = document.getElementById('download-btn');
+    const statusText = document.getElementById('status');
+
+    // Check if already downloaded on load
+    window.addEventListener('DOMContentLoaded', async () => {
+        const cache = await caches.open('video-cache-v1');
+        const match = await cache.match(videoUrl);
+        if (match) {
+            downloadBtn.disabled = true;
+            downloadBtn.innerText = "Downloaded 🎉";
+            statusText.innerText = "Status: Available Offline";
+        }
+    });
+
+    // Download Logic via Cache API
+    downloadBtn.addEventListener('click', async () => {
+        statusText.innerText = "Status: Downloading... Please wait.";
+        downloadBtn.disabled = true;
+
+        try {
+            const cache = await caches.open('video-cache-v1');
+            // Fetch and cache the video asset
+            await cache.add(videoUrl);
+            statusText.innerText = "Status: Download Complete! Test offline mode now.";
+            downloadBtn.innerText = "Downloaded 🎉";
+        } catch (error) {
+            console.error("Download failed:", error);
+            statusText.innerText = "Status: Download failed. (Check CORS configuration of the asset link)";
+            downloadBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
+
