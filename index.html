@@ -194,13 +194,15 @@
     });
 
     // Register Service Worker
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('Service Worker registered!', reg))
-                .catch(err => console.error('Service Worker registration failed: ', err));
-        });
-    }
+      if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        // Adding { scope: './' } ensures it aligns perfectly with manifest.json
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then(reg => console.log('Service Worker registered successfully with scope:', reg.scope))
+            .catch(err => console.error('Service Worker registration failed: ', err));
+    });
+      }
+    
 
     // Video Download Logic
     const videoUrl = document.querySelector('source').src;
