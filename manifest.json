@@ -1,0 +1,17 @@
+{
+  "short_name": "OfflinePlayer",
+  "name": "PWA Video Player Tester",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/716/716429.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#121212",
+  "theme_color": "#00bfff",
+  "display": "standalone",
+  "orientation": "portrait-primary"
+}
+
