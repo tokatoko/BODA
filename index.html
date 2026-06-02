@@ -3,542 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Luxury Cinema Vault</title>
+    <title>Absolute Value of Romance - Stream & Download</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1216">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
     <style>
-        /* --- High-End Cinematic Luxury Theme --- */
         :root {
-            --bg-deep: #0a0a0a;
-            --bg-surface: #141414;
-            --bg-element: #1e1e1e;
-            --gold-light: #f6e3a2;
-            --gold-main: #cda250;
-            --gold-dark: #96702d;
-            --gold-gradient: linear-gradient(135deg, #96702d 0%, #cda250 50%, #f6e3a2 100%);
-            --text-light: #fdfdfd;
-            --text-dim: #999999;
-            --border-gold: 1px solid rgba(205, 162, 80, 0.25);
-            --gold-glow: 0px 0px 15px rgba(205, 162, 80, 0.15);
+            --bg-color: #120c0f;
+            --card-bg: #1d1419;
+            --accent-color: #ff6584;
+            --accent-gradient: linear-gradient(135deg, #ff6584, #ff8a75);
+            --text-main: #f5eff2;
+            --text-muted: #a6969f;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Cinzel', 'Georgia', 'Times New Roman', serif;
-            background-color: var(--bg-deep);
-            color: var(--text-light);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: var(--border-gold);
-            padding-bottom: 15px;
-            width: 100%;
-            max-width: 1300px;
-        }
-
-        header h1 {
-            font-weight: 300;
-            letter-spacing: 6px;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
-        }
-
-        .status-bar {
-            font-size: 11px;
-            letter-spacing: 2px;
-            color: var(--gold-main);
-            text-transform: uppercase;
-        }
-
-        /* --- Main Layout Grid --- */
-        .workspace {
-            width: 100%;
-            max-width: 1300px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        @media (min-width: 1024px) {
-            .workspace {
-                grid-template-columns: 420px 1fr;
-            }
-        }
-
-        /* --- Form Panels & Luxury Elements --- */
-        .panel {
-            background-color: var(--bg-surface);
-            border: var(--border-gold);
-            border-radius: 4px;
-            padding: 25px;
-            box-shadow: var(--gold-glow);
-            height: fit-content;
-        }
-
-        .panel h2 {
-            font-size: 16px;
-            font-weight: 400;
-            color: var(--gold-main);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(205, 162, 80, 0.1);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-dim);
-            margin-bottom: 6px;
-        }
-
-        label .optional {
-            color: #555;
-            font-size: 10px;
-            text-transform: lowercase;
-            font-style: italic;
-        }
-
-        input[type="text"], textarea {
-            width: 100%;
-            box-sizing: border-box;
-            background-color: var(--bg-deep);
-            border: 1px solid #2d2d2d;
-            color: var(--text-light);
-            padding: 10px 12px;
-            font-family: inherit;
-            font-size: 13px;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: var(--gold-main);
-            box-shadow: 0 0 8px rgba(205, 162, 80, 0.2);
-        }
-
-        /* --- Dynamic Episode Card Architecture --- */
-        .episode-builder-card {
-            background: var(--bg-element);
-            border: 1px solid #2d2d2d;
-            padding: 15px;
-            margin-bottom: 15px;
-            position: relative;
-            border-left: 3px solid var(--gold-main);
-        }
-
-        .btn-remove-node {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: #8b2626;
-            cursor: pointer;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        .btn-remove-node:hover { color: #ff4d4d; }
-
-        /* --- Action Controls --- */
-        button.btn-prime {
-            width: 100%;
-            padding: 12px;
-            background: var(--gold-gradient);
-            border: none;
-            color: #000;
-            font-weight: bold;
-            font-family: inherit;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: opacity 0.3s;
-            border-radius: 2px;
-            margin-top: 5px;
-        }
-        button.btn-prime:hover { opacity: 0.9; }
-
-        button.btn-action-dim {
-            background: transparent;
-            border: 1px solid var(--gold-dark);
-            color: var(--gold-main);
-            padding: 8px 12px;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            margin-bottom: 15px;
-            transition: all 0.2s;
-        }
-        button.btn-action-dim:hover { background: rgba(205, 162, 80, 0.08); border-color: var(--gold-main); }
-
-        /* --- Theater / Dynamic Screen Feed Display --- */
-        .theater-room {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .cinema-screen-container {
-            background-color: #000;
-            border: var(--border-gold);
-            box-shadow: var(--gold-glow);
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            position: relative;
-            overflow: hidden;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        /* --- Curated Collection Grid Rendering --- */
-        .vault-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        .showcase-card {
-            background: var(--bg-surface);
-            border: var(--border-gold);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        }
-
-        @media (min-width: 600px) {
-            .showcase-card { flex-direction: row; }
-        }
-
-        .showcase-banner {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background-size: cover;
-            background-position: center;
-            background-color: #111;
-            flex-shrink: 0;
-        }
-        @media (min-width: 600px) {
-            .showcase-banner { width: 240px; height: auto; }
-        }
-
-        .showcase-details {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .showcase-meta-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .showcase-title {
-            font-size: 18px;
-            font-weight: 400;
-            color: #fff;
-            margin: 0;
-            letter-spacing: 1px;
-        }
-
-        .showcase-synopsis {
-            font-size: 12px;
-            color: var(--text-dim);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
             line-height: 1.6;
-            margin-bottom: 15px;
-            font-family: sans-serif;
+            padding-bottom: 60px;
         }
 
-        /* --- Dynamic Playlist Render Engine --- */
-        .playlist-wrapper {
-            margin-top: auto;
-            border-top: 1px solid #252525;
-            padding-top: 12px;
-        }
-        .playlist-title-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--gold-main);
-            margin-bottom: 8px;
-        }
-
-        .playlist-nodes {
+        /* Hero Banner Section */
+        .hero {
+            position: relative;
+            height: 60vh;
+            background: linear-gradient(to bottom, rgba(18,12,15,0.2), #120c0f), 
+                        url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=1200') no-repeat center center/cover;
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            align-items: flex-end;
+            padding: 40px;
+        }
+        .hero-content { max-width: 800px; }
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.7);
+        }
+        .tags span {
+            background: rgba(255, 101, 132, 0.2);
+            border: 1px solid var(--accent-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 8px;
         }
 
-        .playlist-item {
-            background: var(--bg-element);
-            border: 1px solid #252525;
-            padding: 8px 12px;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s;
-        }
-        .playlist-item:hover {
-            border-color: var(--gold-main);
-            background: rgba(205, 162, 80, 0.05);
+        /* Main Container Layout */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+        /* Video Player Section */
+        .player-wrapper {
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
         }
 
-        .playlist-item .ep-number {
-            color: var(--gold-main);
-            font-weight: bold;
-            margin-right: 5px;
+        /* Description Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 30px;
         }
-
-        .management-actions button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 11px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-left: 12px;
+        .card h2 { font-family: 'Playfair Display', serif; margin-bottom: 15px; color: var(--accent-color); }
+        
+        /* Cast List Layout */
+        .cast-list { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .cast-member { text-align: center; width: 100px; }
+        .cast-member img {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+            border: 2px solid var(--accent-color); margin-bottom: 8px;
         }
-        .btn-edit { color: var(--gold-main); }
-        .btn-delete { color: #8b2626; }
-        .btn-delete:hover { color: #ff4d4d; }
+        .cast-member p { font-size: 0.85rem; font-weight: 600; }
+        .cast-member span { font-size: 0.75rem; color: var(--text-muted); }
 
-        .now-playing-tag {
-            background: var(--gold-gradient);
-            color: #000;
-            font-size: 8px;
-            font-weight: bold;
-            padding: 2px 5px;
-            text-transform: uppercase;
-            border-radius: 2px;
+        /* Episode List styling */
+        .episode-list { display: flex; flex-direction: column; gap: 15px; }
+        .ep-card {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--card-bg); padding: 15px 20px; border-radius: 12px;
+            cursor: pointer; transition: 0.3s; border-left: 4px solid transparent;
+        }
+        .ep-card:hover, .ep-card.active {
+            border-left-color: var(--accent-color);
+            background: #261b21;
+        }
+        .ep-details h4 { font-weight: 600; }
+        .ep-details p { font-size: 0.8rem; color: var(--text-muted); }
+        
+        /* Action Buttons */
+        .btn-download {
+            background: transparent; border: 1px solid var(--accent-color);
+            color: var(--accent-color); padding: 6px 14px; border-radius: 8px;
+            cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 5px;
+            transition: 0.3s;
+        }
+        .btn-download:hover { background: var(--accent-color); color: #fff; }
+        .btn-download.downloaded { background: #2e7d32; border-color: #2e7d32; color: white; }
+
+        /* PWA Install Modal Stylings */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center; z-index: 9999;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal {
+            background: var(--card-bg); padding: 40px; border-radius: 24px;
+            max-width: 450px; text-align: center; border: 1px solid rgba(255,101,132,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .modal img { width: 90px; height: 90px; border-radius: 20px; margin-bottom: 20px; }
+        .modal h2 { font-family: 'Playfair Display', serif; margin-bottom: 10px; }
+        .modal p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; }
+        .modal-btns { display: flex; gap: 15px; justify-content: center; }
+        .btn-prime {
+            background: var(--accent-gradient); border: none; color: white;
+            padding: 12px 28px; border-radius: 30px; font-weight: 600; cursor: pointer;
+        }
+        .btn-sec {
+            background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted);
+            padding: 12px 28px; border-radius: 30px; cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Aether Cinema Vault</h1>
-        <div id="status-engine" class="status-bar">Connecting to high-fidelity cloud streams...</div>
-    </header>
-
-    <div class="workspace">
-        <section class="panel">
-            <h2 id="form-heading">Curate Masterpiece</h2>
-            <form id="vault-form">
-                <input type="hidden" id="edit-index-token" value="">
-                
-                <div class="form-group">
-                    <label>Collection Title</label>
-                    <input type="text" id="main-title" placeholder="e.g., Chrono Cross Anthology" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Cover Photo Landscape URL <span class="optional">(optional)</span></label>
-                    <input type="text" id="cover-url" placeholder="https://domain.com/image.jpg">
-                </div>
-
-                <div class="form-group">
-                    <label>Synopsis / Narrative Context <span class="optional">(optional)</span></label>
-                    <textarea id="synopsis" rows="3" placeholder="Enter continuous structural lore configurations..."></textarea>
-                </div>
-
-                <div id="episodes-form-stage">
-                    </div>
-
-                <button type="button" class="btn-action-dim" id="add-episode-node">+ Add Episode Element</button>
-                <button type="submit" class="btn-prime" id="submit-btn">Commit to Archive</button>
-                <button type="button" class="btn-action-dim" id="cancel-edit-btn" style="display: none; width: 100%; margin-top: 10px; border-color: #444; color: #888;">Abandon Changes</button>
-            </form>
-        </section>
-
-        <section class="theater-room">
-            <div class="cinema-screen-container">
-                <video id="cinema-lens" controls playsinline>
-                    <div id="subtitles-track-node"></div>
-                </video>
+    <div class="modal-overlay" id="installModal">
+        <div class="modal">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=150" alt="App Icon">
+            <h2>Install Romance App</h2>
+            <p>Install "Absolute Value of Romance" on your home screen to unlock offline viewing capabilities anytime, anywhere.</p>
+            <div class="modal-btns">
+                <button class="btn-prime" id="btnInstall">Install Now</button>
+                <button class="btn-sec" id="btnCancel">Maybe Later</button>
             </div>
-
-            <div id="vault-display-track" class="vault-grid">
-                </div>
-        </section>
+        </div>
     </div>
 
+    <div class="hero">
+        <div class="hero-content">
+            <div class="tags"><span>K-Drama</span><span>Rom-Com</span><span>Melodrama</span></div>
+            <h1>Absolute Value of Romance</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+            
+            <div>
+                <div class="player-wrapper">
+                    <video id="player" playsinline controls>
+                        <source id="videoSource" src="https://archive.org/download/absolute-value-of-romance-s-1-e-2-1080-p/Absolute%20Value%20of%20Romance-S1E2-1080P.mp4" type="video/mp4" />
+                    </video>
+                </div>
+
+                <div class="card">
+                    <h2 id="nowPlayingTitle">Playing: Episode 1</h2>
+                    <p>When a strictly logical math professor meets a free-spirited romance novelist, they find that love defies every known formula. Can their opposites-attract relationship resolve into a perfect whole, or will the variables drive them completely apart?</p>
+                </div>
+
+                <div class="card">
+                    <h2>Starring Cast</h2>
+                    <div class="cast-list">
+                        <div class="cast-member">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Actor 1">
+                            <p>Han Min-chae</p>
+                            <span>As Ji-woo</span>
+                        </div>
+                        <div class="cast-member">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="Actor 2">
+                            <p>Seo Joon-ho</p>
+                            <span>As Do-hyun</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h2>Episodes Hub</h2>
+                    <div class="episode-list">
+                        <div class="ep-card active" data-src="https://archive.org/download/absolute-value-of-romance-s-1-e-2-1080-p/Absolute%20Value%20of%20Romance-S1E2-1080P.mp4" data-title="Episode 1: The Linear Equation of Love">
+                            <div class="ep-details" onclick="changeEpisode(this)">
+                                <h4>Episode 1</h4>
+                                <p>The Linear Equation of Love</p>
+                            </div>
+                            <button class="btn-download" onclick="downloadVideo('https://archive.org/download/absolute-value-of-romance-s-1-e-2-1080-p/Absolute%20Value%20of%20Romance-S1E2-1080P.mp4', this)">
+                                📥 Save Offline
+                            </button>
+                        </div>
+
+                        <div class="ep-card" data-src="PLACEHOLDER_EP2_MP4_URL" data-title="Episode 2: Non-Linear Systems">
+                            <div class="ep-details" onclick="changeEpisode(this)">
+                                <h4>Episode 2</h4>
+                                <p>Non-Linear Systems [Placeholder]</p>
+                            </div>
+                            <button class="btn-download" onclick="downloadVideo('PLACEHOLDER_EP2_MP4_URL', this)">
+                                📥 Save Offline
+                            </button>
+                        </div>
+                        
+                        <div class="ep-card" data-src="PLACEHOLDER_EP3_MP4_URL" data-title="Episode 3: The Convergence Point">
+                            <div class="ep-details" onclick="changeEpisode(this)">
+                                <h4>Episode 3</h4>
+                                <p>The Convergence Point [Placeholder]</p>
+                            </div>
+                            <button class="btn-download" onclick="downloadVideo('PLACEHOLDER_EP3_MP4_URL', this)">
+                                📥 Save Offline
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script src="register.js"></script>
     <script>
-        // Synchronized Infrastructure Access Credentials
-        const BIN_ID = '6a0404daadc21f119a9187db';
-        const MASTER_KEY = '$2a$10$/lTihGKHTbTAQptFHCYKq.qt3eIZPbbEm9GgTbpfp71Dm29bG53Nq';
-        const CONFIG_ENDPOINT = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        // Start Plyr Player
+        const player = new Plyr('#player', {
+            controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'fullscreen']
+        });
 
-        let synchronizedCacheArray = [];
-
-        // UI Core Targets
-        const vaultForm = document.getElementById('vault-form');
-        const episodesFormStage = document.getElementById('episodes-form-stage');
-        const addEpisodeNodeBtn = document.getElementById('add-episode-node');
-        const vaultDisplayTrack = document.getElementById('vault-display-track');
-        const statusEngine = document.getElementById('status-engine');
-        const editIndexToken = document.getElementById('edit-index-token');
-        const formHeading = document.getElementById('form-heading');
-        const submitBtn = document.getElementById('submit-btn');
-        const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        const cinemaLens = document.getElementById('cinema-lens');
-
-        // Fetch Pipeline Setup
-        async function loadCloudVault() {
-            logStatus("Fetching remote master database records...");
-            try {
-                const response = await fetch(CONFIG_ENDPOINT, {
-                    method: 'GET',
-                    headers: { 'X-Master-Key': MASTER_KEY }
-                });
-                if (!response.ok) throw new Error("Channel configuration drop.");
-                const data = await response.json();
-                synchronizedCacheArray = Array.isArray(data.record) ? data.record : [];
-                renderStructuralCatalog();
-                logStatus("Vault Sync Complete.");
-            } catch (error) {
-                console.error(error);
-                logStatus("Sync disruption. Running on fallback simulation.");
-            }
-        }
-
-        // Commit Push Pipeline
-        async function writeCloudVault() {
-            logStatus("Encrypting and transmitting architectural edits...");
-            try {
-                const response = await fetch(CONFIG_ENDPOINT, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
-                    },
-                    body: JSON.stringify(synchronizedCacheArray)
-                });
-                if (!response.ok) throw new Error("Upstream verification denied.");
-                logStatus("Cloud Matrix Updated Instantly.");
-                renderStructuralCatalog();
-            } catch (error) {
-                console.error(error);
-                logStatus("Push crashed. System holding data in memory.");
-            }
-        }
-
-        function logStatus(msg) {
-            statusEngine.innerText = `System Status: ${msg}`;
-        }
-
-        // Generate Dynamic Episode Inputs inside the Curation Panel
-        function appendEpisodeInputNode(title = '', mediaUrl = '', trackContent = '') {
-            const div = document.createElement('div');
-            div.className = 'episode-builder-card';
-            div.innerHTML = `
-                <button type="button" class="btn-remove-node" onclick="this.parentElement.remove()">✕</button>
-                <div class="form-group">
-                    <label>Episode Naming Title <span class="optional">(optional - defaults to ordered indexing)</span></label>
-                    <input type="text" class="input-ep-title" placeholder="e.g., Episode 01: Awakening" value="${title}">
-                </div>
-                <div class="form-group">
-                    <label>Video URL Asset (.mp4 / .m3u8)</label>
-                    <input type="text" class="input-ep-media" placeholder="https://domain.com/stream.mp4" value="${mediaUrl}" required>
-                </div>
-                <div class="form-group">
-                    <label>WebVTT Structural Text Dialogue Subtitles</label>
-                    <textarea class="input-ep-tracks" rows="3" placeholder="WEBVTT\\n\\n00:01.000 --> 00:04.000\\nSample text dialogue..." required>${trackContent}</textarea>
-                </div>
-            `;
-            episodesFormStage.appendChild(div);
-        }
-
-        // Construct Layout Feeds & Sort Playlists Alphabetically / Numerically (Ascending)
-        function renderStructuralCatalog() {
-            vaultDisplayTrack.innerHTML = '';
-            if (synchronizedCacheArray.length === 0) {
-                vaultDisplayTrack.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-dim); border:1px dashed #333;">Cinema Core Archive is currently empty.</div>`;
+        // Switch Episodes dynamic function
+        function changeEpisode(element) {
+            const parent = element.parentElement;
+            const videoUrl = parent.getAttribute('data-src');
+            const title = parent.getAttribute('data-title');
+            
+            if(videoUrl.includes('PLACEHOLDER')) {
+                alert("Please swap this placeholder link with a real MP4 video link inside index.html!");
                 return;
             }
 
-            synchronizedCacheArray.forEach((collection, collectionIdx) => {
-                const card = document.createElement('div');
-                card.className = 'showcase-card';
-
-                const bannerImg = collection.coverUrl ? collection.coverUrl : 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500&auto=format&fit=crop';
-                const plotSummary = collection.synopsis ? collection.synopsis : 'No further narrative information has been logged for this catalog record.';
-
-                // Ascending Alphanumeric Sorting Logic applied to Episode arrays
-                let sortedEpisodes = [];
-                if (collection.episodes && collection.episodes.length > 0) {
-                    sortedEpisodes = [...collection.episodes].sort((a, b) => {
-                        const titleA = a.title ? a.title.toLowerCase() : `episode ${String(collection.episodes.indexOf(a)).padStart(5, '0')}`;
-                        const titleB = b.title ? b.title.toLowerCase() : `episode ${String(collection.episodes.indexOf(b)).padStart(5, '0')}`;
-                        return titleA.localeCompare(titleB, undefined, { numeric: true, sensitivity: 'base' });
-                    });
-                }
-
-                let playlistHTML = '';
-                sortedEpisodes.forEach((ep, sortedIdx) => {
-                    const printTitle = ep.title ? ep.title : `Episode ${String(sortedIdx + 1).padStart(2, '0')}`;
-                    
-                    // Create base operational string to serialize complete stream components inside structural layout variables safely
-                    const serializedPayload = encodeURIComponent(JSON.stringify(ep));
-
-                    playlistHTML += `
-                        <div class="playlist-item" onclick="mountCinemaStream('${serializedPayload}', this)">
-                            <div>
-                                <span class="ep-number">✦</span> ${escapeHTML(printTitle)}
-                            </div>
-                            <div class="status-marker"></div>
-                        </div>
-                    `;
-                });
-
-                card.innerHTML = `
-                    <div class="showcase-banner" style="background-image: url('${escapeHTML(bannerImg)}');"></div>
-                    <div class="showcase-details">
-                        <div class="showcase-meta-header">
-                            <h3 class="showcase-title">${escapeHTML(collection.title)}</h3>
-                            <div class="management-actions">
-                                <button class="btn-edit" onclick="openEditorEngine(${collectionIdx})">Edit</button>
-                                <button class="btn-delete" onclick="killCatalogNode(${collectionIdx})">Remove</button>
-                            </div>
-                        </div>
-                        <p class="showcase-synopsis">${escapeHTML(plotSummary)}</p>
-                        
-                        <div class="playlist-wrapper">
-                            <div class="playlist-title-label">Ascending Media Tracks</div>
-                            <div class="playlist-nodes">${playlistHTML}</div>
-                        </div>
-                    </div>
-                `;
-                vaultDisplayTrack.appendChild(card);
-            });
+            document.querySelectorAll('.ep-card').forEach(card => card.classList.remove('active'));
+            parent.classList.add('active');
+            
+            document.getElementById('nowPlayingTitle').innerText = `Playing: ${title}`;
+            
+            // Switch Source seamlessly
+            const videoElement = document.getElementById('player');
+            videoElement.src = videoUrl;
+            player.play();
         }
 
-        // Native System Player Allocation Controller
-        window.mountCinemaStream = function(payloadString, elementDomRef) {
-            // Unmark active highlights across other elements
-            document.qu
+        // Send a specific MP4 stream directly down to the Service Worker cache
+        function downloadVideo(url, button) {
+            if (url.includes('PLACEHOLDER')) {
+                alert("Provide a valid MP4 URL to cache files offline.");
+                return;
+            }
+            
+            button.innerText = "⏳ Saving...";
+            button.disabled = true;
+
+            if ('caches' in window) {
+                caches.open('kdrama-video-cache-v1').then(cache => {
+                    cache.add(url).then(() => {
+                        button.innerText = "✅ Saved Offline";
+                        button.classList.add('downloaded');
+                    }).catch(err => {
+                        console.error("Caching execution failed: ", err);
+                        button.innerText = "❌ Download Failed";
+                        button.disabled = false;
+                    });
+                });
+            } else {
+                alert("Your browser environment does not support offline standard local video downloads.");
+            }
+        }
+
+        // PWA Modal Prompt Logic
+        let deferredPrompt;
+        const modal = document.getElementById('installModal');
+        const btnInstall = document.getElementById('btnInstall');
+        const btnCancel = document.getElementById('btnCancel');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Delay to feel highly integrated into the dynamic experience
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 1200);
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User joined the app community layout');
+                }
+                deferredPrompt = null;
+                modal.classList.remove('show');
+            }
+        });
+
+        btnCancel.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+    </script>
+</body>
+    </html>
+                                
