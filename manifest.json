@@ -1,17 +1,22 @@
 {
-  "short_name": "OfflinePlayer",
-  "name": "PWA Video Player Tester",
+  "name": "Absolute Value of Romance",
+  "short_name": "Romance App",
+  "description": "Watch Absolute Value of Romance Online and Completely Offline.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#120c0f",
+  "theme-color": "#1a1216",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/716/716429.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=512",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ],
-  "start_url": "./index.html",
-  "scope": "./",
-  "background_color": "#121212",
-  "theme_color": "#00bfff",
-  "display": "standalone",
-  "orientation": "portrait-primary"
+  ]
 }
