@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Absolute Value of Romance - Stream & Download</title>
     
+    <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1216">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts & Plyr CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,600;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
     <style>
@@ -32,30 +34,57 @@
             padding-bottom: 60px;
         }
 
+        /* FORCE MODAL AT THE VERY START */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(12px);
+            display: flex; justify-content: center; align-items: center; z-index: 99999;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        
+        .modal {
+            background: var(--card-bg); padding: 40px 30px; border-radius: 24px;
+            max-width: 450px; width: 90%; text-align: center; border: 1px solid rgba(255,101,132,0.2);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            transform: scale(0.9); transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal { transform: scale(1); }
+        .modal img { width: 90px; height: 90px; border-radius: 22px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .modal h2 { font-family: 'Playfair Display', serif; margin-bottom: 10px; font-size: 1.8rem; }
+        .modal p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; }
+        .modal-btns { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; }
+        
+        .btn-prime {
+            background: var(--accent-gradient); border: none; color: white;
+            padding: 14px 0; width: 100%; border-radius: 30px; font-weight: 600; cursor: pointer;
+            font-size: 1rem; transition: transform 0.2s;
+        }
+        .btn-prime:active { transform: scale(0.98); }
+        .btn-sec {
+            background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted);
+            padding: 10px 0; width: 100%; border-radius: 30px; cursor: pointer; font-size: 0.9rem;
+        }
+        .ios-instructions {
+            display: none; background: rgba(255,255,255,0.05); 
+            padding: 15px; border-radius: 12px; text-align: left; font-size: 0.85rem; margin-bottom: 15px;
+        }
+
         /* Hero Banner Section */
         .hero {
-            position: relative;
-            height: 60vh;
+            position: relative; height: 50vh;
             background: linear-gradient(to bottom, rgba(18,12,15,0.2), #120c0f), 
                         url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=1200') no-repeat center center/cover;
-            display: flex;
-            align-items: flex-end;
-            padding: 40px;
+            display: flex; align-items: flex-end; padding: 40px;
         }
         .hero-content { max-width: 800px; }
         .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.7);
+            font-family: 'Playfair Display', serif; font-size: 3.5rem;
+            margin-bottom: 10px; text-shadow: 0 4px 10px rgba(0,0,0,0.7);
         }
         .tags span {
-            background: rgba(255, 101, 132, 0.2);
-            border: 1px solid var(--accent-color);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-right: 8px;
+            background: rgba(255, 101, 132, 0.2); border: 1px solid var(--accent-color);
+            padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; margin-right: 8px;
         }
 
         /* Main Container Layout */
@@ -65,20 +94,12 @@
 
         /* Video Player Section */
         .player-wrapper {
-            background: #000;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 25px;
+            background: #000; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 25px;
         }
 
         /* Description Cards */
-        .card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-        }
+        .card { background: var(--card-bg); padding: 30px; border-radius: 16px; margin-bottom: 30px; }
         .card h2 { font-family: 'Playfair Display', serif; margin-bottom: 15px; color: var(--accent-color); }
         
         /* Cast List Layout */
@@ -99,63 +120,49 @@
             cursor: pointer; transition: 0.3s; border-left: 4px solid transparent;
         }
         .ep-card:hover, .ep-card.active {
-            border-left-color: var(--accent-color);
-            background: #261b21;
+            border-left-color: var(--accent-color); background: #261b21;
         }
+        .ep-details { flex-grow: 1; }
         .ep-details h4 { font-weight: 600; }
         .ep-details p { font-size: 0.8rem; color: var(--text-muted); }
         
         /* Action Buttons */
         .btn-download {
             background: transparent; border: 1px solid var(--accent-color);
-            color: var(--accent-color); padding: 6px 14px; border-radius: 8px;
+            color: var(--accent-color); padding: 8px 14px; border-radius: 8px;
             cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 5px;
-            transition: 0.3s;
+            transition: 0.3s; white-space: nowrap; margin-left: 10px;
         }
         .btn-download:hover { background: var(--accent-color); color: #fff; }
         .btn-download.downloaded { background: #2e7d32; border-color: #2e7d32; color: white; }
-
-        /* PWA Install Modal Stylings */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center; z-index: 9999;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-        }
-        .modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .modal {
-            background: var(--card-bg); padding: 40px; border-radius: 24px;
-            max-width: 450px; text-align: center; border: 1px solid rgba(255,101,132,0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-        .modal img { width: 90px; height: 90px; border-radius: 20px; margin-bottom: 20px; }
-        .modal h2 { font-family: 'Playfair Display', serif; margin-bottom: 10px; }
-        .modal p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 25px; }
-        .modal-btns { display: flex; gap: 15px; justify-content: center; }
-        .btn-prime {
-            background: var(--accent-gradient); border: none; color: white;
-            padding: 12px 28px; border-radius: 30px; font-weight: 600; cursor: pointer;
-        }
-        .btn-sec {
-            background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted);
-            padding: 12px 28px; border-radius: 30px; cursor: pointer;
-        }
     </style>
 </head>
 <body>
 
+    <!-- Direct Modal on Window Load -->
     <div class="modal-overlay" id="installModal">
         <div class="modal">
             <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&q=80&w=150" alt="App Icon">
-            <h2>Install Romance App</h2>
-            <p>Install "Absolute Value of Romance" on your home screen to unlock offline viewing capabilities anytime, anywhere.</p>
+            <h2>Install App Required</h2>
+            <p>Save <strong>Absolute Value of Romance</strong> to your device layout for instant access and seamless offline episode downloads.</p>
+            
+            <!-- Hidden by default, shown via JS if on iOS -->
+            <div class="ios-instructions" id="iosInstructions">
+                <strong>iPhone / iPad Users:</strong>
+                <ol style="margin-left: 18px; margin-top: 5px;">
+                    <li>Tap the <strong>Share</strong> button (bottom menu bar).</li>
+                    <li>Scroll down and select <strong>"Add to Home Screen"</strong>.</li>
+                </ol>
+            </div>
+
             <div class="modal-btns">
-                <button class="btn-prime" id="btnInstall">Install Now</button>
-                <button class="btn-sec" id="btnCancel">Maybe Later</button>
+                <button class="btn-prime" id="btnInstall">Install App</button>
+                <button class="btn-sec" id="btnCancel">Continue to Web Version</button>
             </div>
         </div>
     </div>
 
+    <!-- Hero Header Banner -->
     <div class="hero">
         <div class="hero-content">
             <div class="tags"><span>K-Drama</span><span>Rom-Com</span><span>Melodrama</span></div>
@@ -163,9 +170,11 @@
         </div>
     </div>
 
+    <!-- Main Content Grid -->
     <div class="container">
         <div class="grid">
             
+            <!-- Left Side: Custom Video Player Hub -->
             <div>
                 <div class="player-wrapper">
                     <video id="player" playsinline controls>
@@ -182,12 +191,12 @@
                     <h2>Starring Cast</h2>
                     <div class="cast-list">
                         <div class="cast-member">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Actor 1">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150" alt="Han Min-chae">
                             <p>Han Min-chae</p>
                             <span>As Ji-woo</span>
                         </div>
                         <div class="cast-member">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="Actor 2">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150" alt="Seo Joon-ho">
                             <p>Seo Joon-ho</p>
                             <span>As Do-hyun</span>
                         </div>
@@ -195,10 +204,13 @@
                 </div>
             </div>
 
+            <!-- Right Side: Interactive Episode Hub -->
             <div>
                 <div class="card">
                     <h2>Episodes Hub</h2>
                     <div class="episode-list">
+                        
+                        <!-- Episode 1 -->
                         <div class="ep-card active" data-src="https://archive.org/download/absolute-value-of-romance-s-1-e-2-1080-p/Absolute%20Value%20of%20Romance-S1E2-1080P.mp4" data-title="Episode 1: The Linear Equation of Love">
                             <div class="ep-details" onclick="changeEpisode(this)">
                                 <h4>Episode 1</h4>
@@ -209,20 +221,22 @@
                             </button>
                         </div>
 
+                        <!-- Episode 2 Placeholder -->
                         <div class="ep-card" data-src="PLACEHOLDER_EP2_MP4_URL" data-title="Episode 2: Non-Linear Systems">
                             <div class="ep-details" onclick="changeEpisode(this)">
                                 <h4>Episode 2</h4>
-                                <p>Non-Linear Systems [Placeholder]</p>
+                                <p>Non-Linear Systems</p>
                             </div>
                             <button class="btn-download" onclick="downloadVideo('PLACEHOLDER_EP2_MP4_URL', this)">
                                 📥 Save Offline
                             </button>
                         </div>
                         
+                        <!-- Episode 3 Placeholder -->
                         <div class="ep-card" data-src="PLACEHOLDER_EP3_MP4_URL" data-title="Episode 3: The Convergence Point">
                             <div class="ep-details" onclick="changeEpisode(this)">
                                 <h4>Episode 3</h4>
-                                <p>The Convergence Point [Placeholder]</p>
+                                <p>The Convergence Point</p>
                             </div>
                             <button class="btn-download" onclick="downloadVideo('PLACEHOLDER_EP3_MP4_URL', this)">
                                 📥 Save Offline
@@ -236,22 +250,66 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="register.js"></script>
     <script>
-        // Start Plyr Player
+        // Init Player
         const player = new Plyr('#player', {
             controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'fullscreen']
         });
 
-        // Switch Episodes dynamic function
+        // Forced Immediate Modal logic
+        const modal = document.getElementById('installModal');
+        const btnInstall = document.getElementById('btnInstall');
+        const btnCancel = document.getElementById('btnCancel');
+        const iosInstructions = document.getElementById('iosInstructions');
+        let deferredPrompt;
+
+        // Force Show immediately at the very start
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if user is on iOS Safari
+            const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+            if (!isStandalone) {
+                modal.classList.add('show');
+                if (isIos) {
+                    iosInstructions.style.display = "block";
+                    btnInstall.style.display = "none"; // iOS uses system share panel instead
+                }
+            }
+        });
+
+        // Catch Android/Chrome native install triggers
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            } else {
+                alert("If you are on Desktop Chrome/Edge, click the install icon inside your URL address bar layout!");
+            }
+            modal.classList.remove('show');
+        });
+
+        btnCancel.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // Episode selection switching
         function changeEpisode(element) {
             const parent = element.parentElement;
             const videoUrl = parent.getAttribute('data-src');
             const title = parent.getAttribute('data-title');
             
             if(videoUrl.includes('PLACEHOLDER')) {
-                alert("Please swap this placeholder link with a real MP4 video link inside index.html!");
+                alert("Swap this placeholder link with a real MP4 stream asset link.");
                 return;
             }
 
@@ -260,13 +318,12 @@
             
             document.getElementById('nowPlayingTitle').innerText = `Playing: ${title}`;
             
-            // Switch Source seamlessly
             const videoElement = document.getElementById('player');
             videoElement.src = videoUrl;
             player.play();
         }
 
-        // Send a specific MP4 stream directly down to the Service Worker cache
+        // Cache file download worker interaction layer
         function downloadVideo(url, button) {
             if (url.includes('PLACEHOLDER')) {
                 alert("Provide a valid MP4 URL to cache files offline.");
@@ -282,46 +339,15 @@
                         button.innerText = "✅ Saved Offline";
                         button.classList.add('downloaded');
                     }).catch(err => {
-                        console.error("Caching execution failed: ", err);
-                        button.innerText = "❌ Download Failed";
+                        console.error("Caching error: ", err);
+                        button.innerText = "❌ Error Caching";
                         button.disabled = false;
                     });
                 });
             } else {
-                alert("Your browser environment does not support offline standard local video downloads.");
+                alert("Caching not supported by this browser setup.");
             }
         }
-
-        // PWA Modal Prompt Logic
-        let deferredPrompt;
-        const modal = document.getElementById('installModal');
-        const btnInstall = document.getElementById('btnInstall');
-        const btnCancel = document.getElementById('btnCancel');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            // Delay to feel highly integrated into the dynamic experience
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 1200);
-        });
-
-        btnInstall.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('User joined the app community layout');
-                }
-                deferredPrompt = null;
-                modal.classList.remove('show');
-            }
-        });
-
-        btnCancel.addEventListener('click', () => {
-            modal.classList.remove('show');
-        });
     </script>
 </body>
-    </html>
+</html>
